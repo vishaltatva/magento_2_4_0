@@ -61,6 +61,7 @@ atlassian*
 !/pub/static/.htaccess
 !/pub/media/theme/*
 !/pub/media/styles.css
+!/pub/media/sparsh/*
 
 /var/*
 !/var/.htaccess
