@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5abfcb162fe0ccc6deac2b6792377048",
+    "content-hash": "ff2c728d9343a95047577d69ec7dccad",
     "packages": [
         {
             "name": "2tvenom/cborencode",
@@ -4483,11 +4483,6 @@
         {
             "name": "magento/composer",
             "version": "1.6.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/magento/composer.git",
-                "reference": "fcc66f535d631788f2ba160ff547357086d9b2c9"
-            },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/magento/composer/zipball/fcc66f535d631788f2ba160ff547357086d9b2c9",
@@ -23850,6 +23845,34 @@
             "time": "2020-07-14T17:54:18+00:00"
         },
         {
+            "name": "webgriffe/deployer-magento2",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/webgriffe/deployer-magento2.git",
+                "reference": "92d4e485e3b2465223304d92411e5c04b0e1ea81"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/webgriffe/deployer-magento2/zipball/92d4e485e3b2465223304d92411e5c04b0e1ea81",
+                "reference": "92d4e485e3b2465223304d92411e5c04b0e1ea81",
+                "shasum": ""
+            },
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Webgriffe Srl",
+                    "email": "support@webgriffe.com"
+                }
+            ],
+            "description": "Deployer recipe for Magento 2 project",
+            "time": "2019-01-31T10:31:10+00:00"
+        },
+        {
             "name": "webmozart/assert",
             "version": "1.9.1",
             "source": {
@@ -23938,7 +23961,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "webgriffe/deployer-magento2": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],
