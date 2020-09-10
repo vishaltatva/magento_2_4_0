@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="pushnotification" translate="label" sortOrder="10">
+            <label>Sparsh Push Notification</label>
+        </tab>
+        <section id="pushnotification" translate="label" sortOrder="130" showInDefault="1" showInWebsite="1" showInStore="1">
+            <class>separator-top</class>
+            <label>Sparsh Push Notification</label>
+            <tab>pushnotification</tab>
+            <resource>Sparsh_PushNotification::pushnotification_configuration</resource>
+            <group id="generalpushnotification" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Push Notification Configuration</label>
+                <field id="enablenotification" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Enable Push Notification?</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+				<field id="apikey" translate="label" type="text" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1">  
+                   <label>apiKey</label> 
+                </field> 
+				<field id="authdomain" translate="label" type="text" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="1">  
+                   <label>authDomain</label> 
+                </field>
+				<field id="databaseurl" translate="label" type="text" sortOrder="13" showInDefault="1" showInWebsite="1" showInStore="1">  
+                   <label>databaseURL</label> 
+                </field> 
+				<field id="projectid" translate="label" type="text" sortOrder="14" showInDefault="1" showInWebsite="1" showInStore="1">  
+                   <label>projectId</label> 
+                </field>
+				<field id="storagebucket" translate="label" type="text" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1">  
+                   <label>storageBucket</label> 
+                </field> 
+				<field id="messagingsenderid" translate="label" type="text" sortOrder="16" showInDefault="1" showInWebsite="1" showInStore="1">  
+                   <label>messagingSenderId</label> 
+                </field>
+                <field id="serverkey" translate="label" type="text" sortOrder="16" showInDefault="1" showInWebsite="1" showInStore="1">  
+                   <label>Server key</label> 
+                </field>
+            </group>
+            <group id="prompt" translate="label" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="1">
+              <label>Prompt (Subscription Pop-Up) Settings</label>
+              <field id="enable" translate="label" type="select" sortOrder="17" showInDefault="1" showInWebsite="0" showInStore="0">
+                  <label>Enabled</label>
+                  <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+              </field>
+              <field id="prompt_text" translate="label" type="text" sortOrder="18" showInDefault="1" showInWebsite="1" showInStore="1">  
+                 <label>Prompt Text</label> 
+              </field>              
+              <field id="show_delay" translate="label" type="text" sortOrder="19" showInDefault="1" showInWebsite="1" showInStore="1">  
+                 <label>Show delay (seconds)</label>
+                 <comment>The time interval between a page load and the subscription pop-up appearance.</comment> 
+              </field>
+              <field id="frequency" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                  <label>Set the frequency of prompt display for the same customer</label>
+                  <source_model>Sparsh\PushNotification\Model\Config\Source\Frequency</source_model>
+                  <comment>Choose how frequently to show the prompt to those who haven't consented yet.</comment>
+              </field>
+              <field id="pages" translate="label" type="select" sortOrder="21" showInDefault="1" showInWebsite="0" showInStore="0">
+                  <label>Show the prompt on all pages</label>
+                  <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+              </field>
+              <field id="page_url" translate="label" type="textarea" sortOrder="22" showInDefault="1" showInWebsite="1" showInStore="1">  
+                 <label>Pages to show the prompt on</label>
+                 <comment>List of pages, where the prompt will show. Comma-separated.</comment>
+                <depends>
+                    <field id="pushnotification/prompt/pages">0</field>
+                </depends> 
+              </field>
+            </group>
+        </section>
+    </system>
+</config>

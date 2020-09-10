@@ -1,0 +1,63 @@
+<?php
+$helper = $this->helper('Sparsh\PushNotification\Helper\Data');
+$mediaUrl = $helper->getMediaUrl();
+$baseUrl = $helper->getBaseUrl();
+$isEnable = $helper->getEnablePushNotification();
+?>
+<script>
+   require([
+       "jquery"
+   ], function($) {      
+       var pushnotification = {
+          registerValid : null,
+          open : function(viewUrl, elementId) {
+            <?php if ($isEnable == 1) {?>
+              if (!("Notification" in window)) {                
+              }else if (Notification.permission === "granted") {
+                  sendNotification(viewUrl, elementId);
+              }else if (Notification.permission !== "denied") {
+                Notification.requestPermission().then(function (permission) {
+                  if (permission === "granted") {
+                    sendNotification(viewUrl, elementId);
+                  }
+                });
+              }
+            <?php }?>
+          }
+       };
+
+      window.pushnotification = pushnotification;         
+      function sendNotification(viewUrl,elementId){             
+        var postData = {
+            'templateId' : elementId
+        }; 
+        var sendTestNotificationUrl =<?= '"'.$baseUrl.'pushnotification/index/SendTestNotification"'; ?>;
+        $.ajax({
+            url: sendTestNotificationUrl,
+            type: "post",
+            data: postData,
+            dataType: 'json',
+            showLoader: true,
+            success: function (response) {
+                const notificationTitle = response.template.title;
+                const notificationOptions = {
+                    body: response.template.body,
+                    icon: response.template.icon,
+                    click_action: response.template.click_action        
+                };
+                if (!("Notification" in window)) {
+                } else if (Notification.permission === "granted") {
+                    var notification = new Notification(notificationTitle,notificationOptions);
+                    notification.onclick = function(event) {
+                        event.preventDefault();      
+                        window.open(response.template.click_action , '_blank');
+                        notification.close();
+                    }
+                }                
+            },
+            error: function (jqXHR, textStatus, errorThrown) {                
+            }
+        });
+      }
+   });
+</script>

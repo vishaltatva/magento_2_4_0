@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-2columns-left" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+    <update handle="editor"/>
+    <body>
+        <referenceContainer name="content">
+            <block class="Sparsh\PushNotification\Block\Adminhtml\Tokens\Edit" name="sparsh_pushnotification_tokens_edit"/>
+        </referenceContainer>
+        <referenceContainer name="left">
+            <block class="Sparsh\PushNotification\Block\Adminhtml\Tokens\Edit\Tabs" name="sparsh_pushnotification_tokens_tabs">
+                <block class="Sparsh\PushNotification\Block\Adminhtml\Tokens\Edit\Tab\Tokens" name="sparsh_pushnotification_tokens_edit_tab_tokens"/>
+                <action method="addTab">
+                    <argument name="name" xsi:type="string">tokens</argument>
+                    <argument name="block" xsi:type="string">sparsh_pushnotification_tokens_edit_tab_tokens</argument>
+                </action>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

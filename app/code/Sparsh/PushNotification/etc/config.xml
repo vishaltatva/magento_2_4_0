@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <pushnotification>
+            <prompt>
+                <enable>1</enable>
+                <prompt_text>Do you want to be among first to receive special deals?</prompt_text>
+                <show_delay>2</show_delay>
+                <frequency>1</frequency>
+                <pages>1</pages>
+                <page_url>/</page_url>
+            </prompt>            
+        </pushnotification>       
+    </default>
+</config>
