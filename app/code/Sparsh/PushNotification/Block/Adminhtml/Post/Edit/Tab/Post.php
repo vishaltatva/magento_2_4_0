@@ -13,14 +13,14 @@
 namespace Sparsh\PushNotification\Block\Adminhtml\Post\Edit\Tab;
 
  /**
-  * Class Post
-  *
-  * @category Sparsh
-  * @package  Sparsh_PushNotification
-  * @author   Sparsh <magento@sparsh-technologies.com>
-  * @license  https://www.sparsh-technologies.com  Open Software License (OSL 3.0)
-  * @link     https://www.sparsh-technologies.com
-  */
+* Class Post
+*
+* @category Sparsh
+* @package  Sparsh_PushNotification
+* @author   Sparsh <magento@sparsh-technologies.com>
+* @license  https://www.sparsh-technologies.com  Open Software License (OSL 3.0)
+* @link     https://www.sparsh-technologies.com
+*/
 class Post extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
     /**
@@ -45,12 +45,6 @@ class Post extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
     protected $_booleanOptions;
 
     /**
-     * Sample Multiselect options
-     *
-     * @var \Sparsh\PushNotification\Model\Post\Source\SampleMultiselect
-     */
-    protected $_sampleMultiselectOptions;
-    /**
      * Customer Group
      *
      * @var \Magento\Customer\Model\ResourceModel\Group\Collection
@@ -70,7 +64,6 @@ class Post extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
      * @param \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig
      * @param \Magento\Config\Model\Config\Source\Locale\Country $countryOptions
      * @param \Magento\Config\Model\Config\Source\Yesno $booleanOptions
-     * @param \Sparsh\PushNotification\Model\Post\Source\SampleMultiselect $sampleMultiselectOptions
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
@@ -80,7 +73,6 @@ class Post extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
         \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig,
         \Magento\Config\Model\Config\Source\Locale\Country $countryOptions,
         \Sparsh\PushNotification\Model\Config\Source\ActiveInactive $booleanOptions,
-        \Sparsh\PushNotification\Model\Post\Source\SampleMultiselect $sampleMultiselectOptions,
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Data\FormFactory $formFactory,
@@ -91,7 +83,6 @@ class Post extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
         $this->_wysiwygConfig            = $wysiwygConfig;
         $this->_countryOptions           = $countryOptions;
         $this->_booleanOptions           = $booleanOptions;
-        $this->_sampleMultiselectOptions = $sampleMultiselectOptions;
         $this->customerGroup             = $customerGroup;
         $this->systemStore               = $systemStore;
         parent::__construct($context, $registry, $formFactory, $data);
@@ -104,7 +95,7 @@ class Post extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
      */
     protected function _prepareForm()
     {
-        $post = $this->_coreRegistry->registry('sparsh_pushnotification_post');
+        $post = $this->_coreRegistry->registry('sparsh_push_notification_post');
         $form = $this->_formFactory->create();
         $form->setHtmlIdPrefix('post_');
         $form->setFieldNameSuffix('post');
@@ -114,14 +105,10 @@ class Post extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
                 'class'  => 'fieldset-wide'
             ]
         );
-        
+
         $fieldset->addType(
             'image',
             \Sparsh\PushNotification\Block\Adminhtml\Post\Helper\Image::class
-        );
-        $fieldset->addType(
-            'file',
-            \Sparsh\PushNotification\Block\Adminhtml\Post\Helper\File::class
         );
 
         if ($post->getId()) {
@@ -139,6 +126,7 @@ class Post extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
                 'label' => __('Name'),
                 'title' => __('Name'),
                 'required' => true,
+                'note' => 'Enter name of the template for internal reference.',
             ]
         );
         $fieldset->addField(
@@ -146,9 +134,9 @@ class Post extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
             'date',
             [
                 'name' => 'schedule',
-                'label' => __('Schedule to'),
+                'label' => __('Schedule Datetime'),
                 'id' => 'schedule',
-                'title' => __('Schedule to'),
+                'title' => __('Schedule Datetime'),
                 'date_format' => 'yyyy-MM-dd',
                 'class' => 'required-entry validate-date validate-date-range date-range-attribute-from',
                 'time_format' => 'HH:mm:ss',
@@ -175,8 +163,8 @@ class Post extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
                 'multiselect',
                 [
                     'name' => 'store_view[]',
-                    'label' => __('Store View'),
-                    'title' => __('Store View'),
+                    'label' => __('Store Views'),
+                    'title' => __('Store Views'),
                     'required' => true,
                     'values' => $this->systemStore->getStoreValuesForForm(false, true)
                 ]
@@ -191,20 +179,20 @@ class Post extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
                 'hidden',
                 ['name' => 'store_view[]', 'value' => $this->_storeManager->getStore(true)->getId()]
             );
-            $model->setStoreId($this->_storeManager->getStore(true)->getId());
+            $post->setStoreId($this->_storeManager->getStore(true)->getId());
         }
         $fieldset->addField(
             'status',
             'select',
             [
                 'name'  => 'status',
-                'label' => __('Active'),
-                'title' => __('Active'),
+                'label' => __('Status'),
+                'title' => __('Status'),
                 'values' => $this->_booleanOptions->toOptionArray(),
             ]
         );
 
-        $postData = $this->_session->getData('sparsh_pushnotification_post_data', true);
+        $postData = $this->_session->getData('sparsh_push_notification_post_data', true);
         if ($postData) {
             $post->addData($postData);
         } else {

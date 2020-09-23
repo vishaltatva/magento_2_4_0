@@ -12,15 +12,15 @@
  */
 namespace Sparsh\PushNotification\Block\Adminhtml\Post\Edit;
 
- /**
-  * Class Form
-  *
-  * @category Sparsh
-  * @package  Sparsh_PushNotification
-  * @author   Sparsh <magento@sparsh-technologies.com>
-  * @license  https://www.sparsh-technologies.com  Open Software License (OSL 3.0)
-  * @link     https://www.sparsh-technologies.com
-  */
+/**
+* Class Form
+*
+* @category Sparsh
+* @package  Sparsh_PushNotification
+* @author   Sparsh <magento@sparsh-technologies.com>
+* @license  https://www.sparsh-technologies.com  Open Software License (OSL 3.0)
+* @link     https://www.sparsh-technologies.com
+*/
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**

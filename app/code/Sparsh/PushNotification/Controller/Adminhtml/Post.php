@@ -76,7 +76,7 @@ abstract class Post extends \Magento\Backend\App\Action
         if ($postId) {
             $post->load($postId);
         }
-        $this->_coreRegistry->register('sparsh_pushnotification_post', $post);
+        $this->_coreRegistry->register('sparsh_push_notification_post', $post);
         return $post;
     }
 }

@@ -51,7 +51,7 @@ class Post extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     protected function _construct()
     {
-        $this->_init('sparsh_pushnotification_post', 'post_id');
+        $this->_init('sparsh_push_notification_post', 'post_id');
     }
 
     /**

@@ -33,7 +33,7 @@ class Post extends \Magento\Backend\Block\Widget\Grid\Container
     {
         $this->_controller = 'adminhtml_post';
         $this->_blockGroup = 'Sparsh_PushNotification';
-        $this->_headerText = __('Templates');
+        $this->_headerText = __('Manage Templates');
         $this->_addButtonLabel = __('Create New Template');
         parent::_construct();
     }

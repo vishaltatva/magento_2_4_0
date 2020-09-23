@@ -83,7 +83,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      */
     public function getHeaderText()
     {
-        $post = $this->_coreRegistry->registry('sparsh_pushnotification_post');
+        $post = $this->_coreRegistry->registry('sparsh_push_notification_post');
         if ($post->getId()) {
             return __("Edit Template '%1'", $this->escapeHtml($post->getName()));
         }

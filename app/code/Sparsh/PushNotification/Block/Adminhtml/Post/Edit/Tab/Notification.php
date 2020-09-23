@@ -45,12 +45,6 @@ class Notification extends \Magento\Backend\Block\Widget\Form\Generic implements
     protected $_booleanOptions;
 
     /**
-     * Sample Multiselect options
-     *
-     * @var \Sparsh\PushNotification\Model\Post\Source\SampleMultiselect
-     */
-    protected $_sampleMultiselectOptions;
-    /**
      * Customer Group
      *
      * @var \Magento\Customer\Model\ResourceModel\Group\Collection
@@ -70,7 +64,6 @@ class Notification extends \Magento\Backend\Block\Widget\Form\Generic implements
      * @param \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig
      * @param \Magento\Config\Model\Config\Source\Locale\Country $countryOptions
      * @param \Magento\Config\Model\Config\Source\Yesno $booleanOptions
-     * @param \Sparsh\PushNotification\Model\Post\Source\SampleMultiselect $sampleMultiselectOptions
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
@@ -80,7 +73,6 @@ class Notification extends \Magento\Backend\Block\Widget\Form\Generic implements
         \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig,
         \Magento\Config\Model\Config\Source\Locale\Country $countryOptions,
         \Magento\Config\Model\Config\Source\Yesno $booleanOptions,
-        \Sparsh\PushNotification\Model\Post\Source\SampleMultiselect $sampleMultiselectOptions,
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Data\FormFactory $formFactory,
@@ -91,7 +83,6 @@ class Notification extends \Magento\Backend\Block\Widget\Form\Generic implements
         $this->_wysiwygConfig            = $wysiwygConfig;
         $this->_countryOptions           = $countryOptions;
         $this->_booleanOptions           = $booleanOptions;
-        $this->_sampleMultiselectOptions = $sampleMultiselectOptions;
         $this->customerGroup             = $customerGroup;
         $this->systemStore               = $systemStore;
         parent::__construct($context, $registry, $formFactory, $data);
@@ -104,7 +95,7 @@ class Notification extends \Magento\Backend\Block\Widget\Form\Generic implements
      */
     protected function _prepareForm()
     {
-        $post = $this->_coreRegistry->registry('sparsh_pushnotification_post');
+        $post = $this->_coreRegistry->registry('sparsh_push_notification_post');
         $form = $this->_formFactory->create();
         $form->setHtmlIdPrefix('post_');
         $form->setFieldNameSuffix('post');
@@ -114,14 +105,10 @@ class Notification extends \Magento\Backend\Block\Widget\Form\Generic implements
               'class' => 'fieldset-wide'
             ]
         );
-        
+
         $notificationFieldset->addType(
             'image',
             \Sparsh\PushNotification\Block\Adminhtml\Post\Helper\Image::class
-        );
-        $notificationFieldset->addType(
-            'file',
-            \Sparsh\PushNotification\Block\Adminhtml\Post\Helper\File::class
         );
 
         if ($post->getId()) {
@@ -136,18 +123,18 @@ class Notification extends \Magento\Backend\Block\Widget\Form\Generic implements
             'text',
             [
                 'name'  => 'template_title',
-                'label' => __('Messege Title'),
-                'title' => __('Messege Title'),
+                'label' => __('Notification Title'),
+                'title' => __('Notification Title'),
                 'required' => true,
             ]
         );
         $notificationFieldset->addField(
-            'template_messege',
+            'template_message',
             'editor',
             [
-                'name'  => 'template_messege',
-                'label' => __('Messege Body'),
-                'title' => __('Messege Body'),
+                'name'  => 'template_message',
+                'label' => __('Notification Message'),
+                'title' => __('Notification Message'),
                 'config'    => 0,
                 'required' => true,
             ]
@@ -166,8 +153,8 @@ class Notification extends \Magento\Backend\Block\Widget\Form\Generic implements
             'image',
             [
                 'name'  => 'template_logo',
-                'label' => __('Logo Image'),
-                'title' => __('Logo Image'),
+                'label' => __('Notification Image'),
+                'title' => __('Notification Image'),
                 'note' => 'Allowed file types: jpg, jpeg, gif, png. Recommended width to height ratio is 1:1 (e.g. 360*360px, 720*720px).',
             ]
         );
@@ -176,9 +163,9 @@ class Notification extends \Magento\Backend\Block\Widget\Form\Generic implements
             'text',
             [
                 'name'  => 'redirect_url',
-                'label' => __('Pop-up Notification Url'),
-                'title' => __('Pop-up Notification Url'),
-                'note' => 'Paste the link you want to direct your pop-up recipients.',
+                'label' => __('Notification Click Url'),
+                'title' => __('Notification Click Url'),
+                'note' => 'Enter a link you want user to redirect on clicking of the notification pop-up.',
             ]
         );
 
@@ -190,12 +177,12 @@ class Notification extends \Magento\Backend\Block\Widget\Form\Generic implements
                 'label' => __('UTM Parameters For Tracking'),
                 'title' => __('UTM Parameters For Tracking'),
                 'placeholder' => __('utm_source=google&utm_medium=cpc'),
-                'note' => 'Use Urchin Tracking Module parameters as an advanced GA tracking option to understand how your visitors interact with your store pages.',
+                'note' => 'Use UTM parameters as an advanced GA tracking option to track visitors interaction activities.',
             ]
         );
-                        
 
-        $postData = $this->_session->getData('sparsh_pushnotification_post_data', true);
+
+        $postData = $this->_session->getData('sparsh_push_notification_post_data', true);
         if ($postData) {
             $post->addData($postData);
         } else {

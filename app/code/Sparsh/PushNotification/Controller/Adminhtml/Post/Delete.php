@@ -33,31 +33,22 @@ class Delete extends \Sparsh\PushNotification\Controller\Adminhtml\Post
         $resultRedirect = $this->_resultRedirectFactory->create();
         $id = $this->getRequest()->getParam('post_id');
         if ($id) {
-            $name = "";
             try {
                 $post = $this->_postFactory->create();
                 $post->load($id);
                 $name = $post->getName();
                 $post->delete();
-                $this->messageManager->addSuccess(__('The Template has been deleted.'));
-                $this->_eventManager->dispatch(
-                    'adminhtml_sparsh_pushnotification_post_on_delete',
-                    ['name' => $name, 'status' => 'success']
-                );
-                $resultRedirect->setPath('sparsh_pushnotification/*/');
+                $this->messageManager->addSuccess(__('The Template "'.$name.'" has been deleted.'));
+                $resultRedirect->setPath('sparsh_push_notification/*/');
                 return $resultRedirect;
             } catch (\Exception $e) {
-                $this->_eventManager->dispatch(
-                    'adminhtml_sparsh_pushnotification_post_on_delete',
-                    ['name' => $name, 'status' => 'fail']
-                );
                 $this->messageManager->addError($e->getMessage());
-                $resultRedirect->setPath('sparsh_pushnotification/*/edit', ['post_id' => $id]);
+                $resultRedirect->setPath('sparsh_push_notification/*/edit', ['post_id' => $id]);
                 return $resultRedirect;
             }
         }
         $this->messageManager->addError(__('Template to delete was not found.'));
-        $resultRedirect->setPath('sparsh_pushnotification/*/');
+        $resultRedirect->setPath('sparsh_push_notification/*/');
         return $resultRedirect;
     }
 }

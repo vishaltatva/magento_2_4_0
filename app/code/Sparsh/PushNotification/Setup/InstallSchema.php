@@ -37,9 +37,9 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
     ) {
         $installer = $setup;
         $installer->startSetup();
-        if (!$installer->tableExists('sparsh_pushnotification_post')) {
+        if (!$installer->tableExists('sparsh_push_notification_post')) {
             $table = $installer->getConnection()->newTable(
-                $installer->getTable('sparsh_pushnotification_post')
+                $installer->getTable('sparsh_push_notification_post')
             )
             ->addColumn(
                 'post_id',
@@ -58,7 +58,7 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
                 \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
                 255,
                 ['nullable => false'],
-                'Name'
+                'Template Name'
             )
             ->addColumn(
                 'template_title',
@@ -68,11 +68,11 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
                 'Template Title'
             )
             ->addColumn(
-                'template_messege',
+                'template_message',
                 \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
                 '64k',
                 [],
-                'Template Messege'
+                'Template Message'
             )
             ->addColumn(
                 'customer_groups',
@@ -142,7 +142,7 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
                 \Magento\Framework\DB\Ddl\Table::TYPE_DATETIME,
                 null,
                 [],
-                'Schedule'
+                'Schedule Date Time'
             )
             ->addColumn(
                 'created_at',
@@ -158,49 +158,42 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
                 [],
                 'Template Updated At'
             )
-            ->setComment('Template Table');
+            ->setComment('Sparsh Push Notification Template Table');
             $installer->getConnection()->createTable($table);
             $installer->getConnection()->addIndex(
-                $installer->getTable('sparsh_pushnotification_post'),
+                $installer->getTable('sparsh_push_notification_post'),
                 $setup->getIdxName(
-                    $installer->getTable('sparsh_pushnotification_post'),
-                    ['template_title','template_messege','redirect_url','template_tags','template_logo'],
+                    $installer->getTable('sparsh_push_notification_post'),
+                    ['name','template_title','template_message','redirect_url','template_tags','template_logo'],
                     \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_FULLTEXT
                 ),
-                ['template_title','template_messege','redirect_url','template_tags','template_logo'],
+                ['name','template_title','template_message','redirect_url','template_tags','template_logo'],
                 \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_FULLTEXT
             );
         }
 
-        if (!$installer->tableExists('sparsh_pushnotification_tokens')) {
+        if (!$installer->tableExists('sparsh_push_notification_tokens')) {
                 $table = $installer->getConnection()->newTable(
-                    $installer->getTable('sparsh_pushnotification_tokens')
+                    $installer->getTable('sparsh_push_notification_tokens')
                 )
                  ->addColumn(
                      'token_id',
                      \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                      null,
                      [
-                     'identity' => true,
-                     'nullable' => false,
-                     'primary'  => true,
-                     'unsigned' => true,
+                         'identity' => true,
+                         'nullable' => false,
+                         'primary'  => true,
+                         'unsigned' => true,
                      ],
                      'Token ID'
-                 )
-                 ->addColumn(
-                     'template_id',
-                     \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
-                     10,
-                     ['nullable => false'],
-                     'Template ID'
                  )
                  ->addColumn(
                      'ip',
                      \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
                      255,
                      ['nullable => false'],
-                     'Ip'
+                     'Ip Address'
                  )
                  ->addColumn(
                      'customer_id',
@@ -237,16 +230,16 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
                      [],
                      'Token Updated At'
                  )
-                 ->setComment('Token Table');
+                 ->setComment('Sparsh Push Notification Token Table');
                  $installer->getConnection()->createTable($table);
                  $installer->getConnection()->addIndex(
-                     $installer->getTable('sparsh_pushnotification_tokens'),
+                     $installer->getTable('sparsh_push_notification_tokens'),
                      $setup->getIdxName(
-                         $installer->getTable('sparsh_pushnotification_tokens'),
-                         ['device','token'],
+                         $installer->getTable('sparsh_push_notification_tokens'),
+                         ['ip','device','token'],
                          \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_FULLTEXT
                      ),
-                     ['device','token'],
+                     ['ip','device','token'],
                      \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_FULLTEXT
                  );
         }

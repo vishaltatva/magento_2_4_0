@@ -31,6 +31,11 @@ class Index extends \Magento\Backend\App\Action
     protected $_resultPageFactory;
 
     /**
+     * @var \Sparsh\PushNotification\Helper\Data
+     */
+    private $data;
+
+    /**
      * Page factory
      *
      * @var \Magento\Backend\Model\View\Result\Page
@@ -45,10 +50,22 @@ class Index extends \Magento\Backend\App\Action
      */
     public function __construct(
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
+        \Sparsh\PushNotification\Helper\Data $data,
         \Magento\Backend\App\Action\Context $context
     ) {
         $this->_resultPageFactory = $resultPageFactory;
+        $this->data = $data;
         parent::__construct($context);
+    }
+
+    /**
+     * is action allowed
+     *
+     * @return bool
+     */
+    protected function _isAllowed()
+    {
+        return $this->_authorization->isAllowed('Sparsh_PushNotification::post');
     }
 
     /**
@@ -58,6 +75,11 @@ class Index extends \Magento\Backend\App\Action
      */
     public function execute()
     {
+        if ($this->data->getEnablePushNotification() == 0) {
+            $resultRedirect = $this->resultRedirectFactory->create();
+            return $resultRedirect->setPath('admin/dashboard/index', ['_current' => true]);
+        }
+
         $this->_setPageData();
         return $this->getResultPage();
     }
@@ -81,6 +103,7 @@ class Index extends \Magento\Backend\App\Action
     protected function _setPageData()
     {
         $resultPage = $this->getResultPage();
+        $resultPage->setActiveMenu('Sparsh_PushNotification::push_notification');
         $resultPage->getConfig()->getTitle()->prepend((__('Manage Templates')));
         return $this;
     }

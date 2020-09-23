@@ -1,9 +1,43 @@
 <?xml version="1.0"?>
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Magento/Backend/etc/menu.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
     <menu>
-        <add id="Sparsh_PushNotification::pushnotification" title="Sparsh Push Notification" module="Sparsh_PushNotification" sortOrder="11" resource="Sparsh_PushNotification::pushnotification"/>
-		<add id="Sparsh_PushNotification::post" title="Create Template" module="Sparsh_PushNotification" sortOrder="10" action="sparsh_pushnotification/post" resource="Sparsh_PushNotification::post" parent="Sparsh_PushNotification::pushnotification"/>
-		<add id="Sparsh_PushNotification::tokens" title="Device Tokens" module="Sparsh_PushNotification" sortOrder="10" action="sparsh_pushnotification/tokens" resource="Sparsh_PushNotification::tokens" parent="Sparsh_PushNotification::pushnotification"/>
-		 <add id="Sparsh_PushNotification::pushnotification_configuration" title="Configuration" module="Sparsh_PushNotification" sortOrder="99" parent="Sparsh_PushNotification::pushnotification" action="adminhtml/system_config/edit/section/pushnotification" resource="Sparsh_PushNotification::pushnotification_configuration"/>
+        <add
+            id="Sparsh_PushNotification::push_notification"
+            title="Sparsh Push Notifications"
+            module="Sparsh_PushNotification"
+            sortOrder="50"
+            resource="Sparsh_PushNotification::push_notification"
+            dependsOnConfig="push_notification/general/enable"
+        />
+		<add
+            id="Sparsh_PushNotification::post"
+            title="Manage Templates"
+            module="Sparsh_PushNotification"
+            sortOrder="10"
+            resource="Sparsh_PushNotification::post"
+            action="sparsh_push_notification/post"
+            parent="Sparsh_PushNotification::push_notification"
+            dependsOnConfig="push_notification/general/enable"
+        />
+		<add
+            id="Sparsh_PushNotification::tokens"
+            title="Device Tokens"
+            module="Sparsh_PushNotification"
+            sortOrder="20"
+            resource="Sparsh_PushNotification::tokens"
+            action="sparsh_push_notification/tokens"
+            parent="Sparsh_PushNotification::push_notification"
+            dependsOnConfig="push_notification/general/enable"
+        />
+		 <add
+             id="Sparsh_PushNotification::push_notification_configuration"
+             title="Configuration"
+             module="Sparsh_PushNotification"
+             sortOrder="30"
+             resource="Sparsh_PushNotification::push_notification_configuration"
+             action="adminhtml/system_config/edit/section/push_notification"
+             parent="Sparsh_PushNotification::push_notification"
+             dependsOnConfig="push_notification/general/enable"
+         />
     </menu>
 </config>

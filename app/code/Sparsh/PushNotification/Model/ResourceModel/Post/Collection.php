@@ -35,7 +35,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @var string
      */
-    protected $_eventPrefix = 'sparsh_pushnotification_post_collection';
+    protected $_eventPrefix = 'sparsh_push_notification_post_collection';
 
     /**
      * Event object

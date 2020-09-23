@@ -63,28 +63,27 @@ abstract class InlineEdit extends \Magento\Backend\App\Action
         $error = false;
         $messages = [];
         $tokensItems = $this->getRequest()->getParam('items', []);
+
         if (!($this->getRequest()->getParam('isAjax') && count($tokensItems))) {
             return $resultJson->setData([
-                'messages' => [__('Please correct the data sent.')],
+                'messages' => [__('Something went wrong while saving the device token.')],
                 'error' => true,
             ]);
         }
+
         foreach (array_keys($tokensItems) as $tokensId) {
             $tokens = $this->_postFactory->create()->load($tokensId);
             try {
                 $tokensData = $tokensItems[$tokensId];
                 $tokens->addData($tokensData);
                 $tokens->save();
-            } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                $messages[] = $this->getErrorWithTokensId($tokens, $e->getMessage());
-                $error = true;
             } catch (\RuntimeException $e) {
                 $messages[] = $this->getErrorWithTokensId($tokens, $e->getMessage());
                 $error = true;
             } catch (\Exception $e) {
                 $messages[] = $this->getErrorWithTokensId(
                     $tokens,
-                    __('Something went wrong while saving the Tokens.')
+                    __('Something went wrong while saving the device token.')
                 );
                 $error = true;
             }
@@ -104,6 +103,6 @@ abstract class InlineEdit extends \Magento\Backend\App\Action
      */
     protected function getErrorWithTokensId(\Sparsh\PushNotification\Model\Tokens $tokens, $errorText)
     {
-        return '[Tokens ID: ' . $tokens->getTokenId() . '] ' . $errorText;
+        return '[Device Token ID: ' . $tokens->getTokenId() . '] ' . $errorText;
     }
 }

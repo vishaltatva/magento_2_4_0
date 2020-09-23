@@ -113,28 +113,29 @@ class SendUserNotification extends \Magento\Framework\App\Action\Action
         try {
             $date = $this->date->date()->format('Y-m-d H:i:s');
             $postCollections = $this->postFactory->create()->getCollection()
-                                                           ->addFieldToFilter('status', 1)
-                                                           ->addFieldToFilter('schedule_status', 0)
-                                                           ->addFieldToFilter('schedule', ['lteq' => $date]);
+               ->addFieldToFilter('status', 1)
+               ->addFieldToFilter('schedule_status', 0)
+               ->addFieldToFilter('schedule', ['lteq' => $date]);
             $templateData = [];
             $i=0;
             foreach ($postCollections as $value) {
-                    $templateData[$i]['post_id']= $value->getPostId();
-                    $templateData[$i]['template_title'] = $value->getTemplateTitle();
-                    $templateData[$i]['template_messege'] =$value->getTemplateMessege();
-                    $templateData[$i]['redirect_url'] = $value->getRedirectUrl();
-                    $templateData[$i]['utm_parameters'] = $value->getUtmParameters();
-                    $templateData[$i]['template_logo'] = $value->getTemplateLogo();
-                    $templateData[$i]['customer_groups'] = $value->getCustomerGroups();
-                    $templateData[$i]['store_view'] = $value->getStoreView();
-                    ++$i;
+                $templateData[$i]['post_id']= $value->getPostId();
+                $templateData[$i]['template_title'] = $value->getTemplateTitle();
+                $templateData[$i]['template_message'] =$value->getTemplateMessage();
+                $templateData[$i]['redirect_url'] = $value->getRedirectUrl();
+                $templateData[$i]['utm_parameters'] = $value->getUtmParameters();
+                $templateData[$i]['template_logo'] = $value->getTemplateLogo();
+                $templateData[$i]['customer_groups'] = $value->getCustomerGroups();
+                $templateData[$i]['store_view'] = $value->getStoreView();
+                ++$i;
             }
+
             if (!empty($templateData)) {
                 $this->sendToCustomer($templateData);
             }
         } catch (\Exception $e) {
             $this->messageManager->addError(
-                __('We can\'t process send Notification request right now. Sorry, that\'s all we know.')
+                __('Something went wrong. We can\'t send notification right now.')
             );
         }
     }
@@ -162,6 +163,7 @@ class SendUserNotification extends \Magento\Framework\App\Action\Action
             }
             ++$j;
         }
+
         $tokenList = [];
         for ($k=0; $k <count($customers); $k++) {
             if (empty($customers[$k])) {
@@ -177,14 +179,14 @@ class SendUserNotification extends \Magento\Framework\App\Action\Action
             }
         }
 
-            $guestTokenList = $this->sendToGuestCustomer($templateData);
+        $guestTokenList = $this->sendToGuestCustomer($templateData);
         if (!empty($guestTokenList)) {
             $this->sendNotification($templateData, $tokenList, $guestTokenList);
         } else {
             if (!empty($tokenList)) {
                 $this->sendCustomerNotification($templateData, $tokenList);
             }
-                                        
+
         }
     }
     /**
@@ -196,9 +198,9 @@ class SendUserNotification extends \Magento\Framework\App\Action\Action
     public function sendToGuestCustomer($templateData)
     {
         $guestTokenCollections = $this->tokensFactory->create()
-                    ->getCollection()
-                    ->addFieldToSelect('token')
-                    ->addFieldToFilter('customer_id', ['eq' =>'Guest']);
+            ->getCollection()
+            ->addFieldToSelect('token')
+            ->addFieldToFilter('customer_id', ['eq' =>'Guest']);
         $guestTokenList = [];
         foreach ($guestTokenCollections as $value) {
                 $guestTokenList[] = $value->getToken();
@@ -227,27 +229,27 @@ class SendUserNotification extends \Magento\Framework\App\Action\Action
                 ++$i;
                 continue;
             }
-                $imageUrl = $mediaUrl.'sparsh/pushnotification/post/image'.$value['template_logo'];
-                $notification = [
-                    'title' =>$value['template_title'],
-                    'body' => $value['template_messege'],
-                    'icon' => $imageUrl,
-                    'click_action' => $value['redirect_url'],
-                    'sound' => 'mySound',
-                    "templateId" =>$value['post_id'],
-                    "utm_parameters" =>$value['utm_parameters']
-                ];
-                $fcmNotification = [
-                    'registration_ids' => $tokenList[$i],
-                    'data' => $notification
-                ];
-                $fcmNotification = json_encode($fcmNotification);
-                $headers = ["Authorization" => "key=".API_ACCESS_KEY, "Content-Type" => "application/json"];
-                $this->curl->setHeaders($headers);
-                $this->curl->post($fcmUrl, $fcmNotification);
-                $response = $this->curl->getBody();
-                $this->setSchedule($value['post_id']);
-                ++$i;
+            $imageUrl = $mediaUrl.'sparsh/push_notification/image'.$value['template_logo'];
+            $notification = [
+                'title' =>$value['template_title'],
+                'body' => $value['template_message'],
+                'icon' => $imageUrl,
+                'click_action' => $value['redirect_url'],
+                'sound' => 'mySound',
+                "templateId" =>$value['post_id'],
+                "utm_parameters" =>$value['utm_parameters']
+            ];
+            $fcmNotification = [
+                'registration_ids' => $tokenList[$i],
+                'data' => $notification
+            ];
+            $fcmNotification = json_encode($fcmNotification);
+            $headers = ["Authorization" => "key=".API_ACCESS_KEY, "Content-Type" => "application/json"];
+            $this->curl->setHeaders($headers);
+            $this->curl->post($fcmUrl, $fcmNotification);
+            $this->curl->getBody();
+            $this->setSchedule($value['post_id']);
+            ++$i;
         }
     }
     /**
@@ -270,27 +272,27 @@ class SendUserNotification extends \Magento\Framework\App\Action\Action
             } else {
                 $tokens =$guestTokenList;
             }
-                $imageUrl = $mediaUrl.'sparsh/pushnotification/post/image'.$value['template_logo'];
-                $notification = [
-                    'title' =>$value['template_title'],
-                    'body' => $value['template_messege'],
-                    'icon' => $imageUrl,
-                    'click_action' => $value['redirect_url'],
-                    'sound' => 'mySound',
-                    "templateId" =>$value['post_id'],
-                    "utm_parameters" =>$value['utm_parameters']
-                ];
-                $fcmNotification = [
-                    'registration_ids' => $tokens,
-                    'data' => $notification
-                ];
-                $fcmNotification = json_encode($fcmNotification);
-                $headers = ["Authorization" => "key=".API_ACCESS_KEY, "Content-Type" => "application/json"];
-                $this->curl->setHeaders($headers);
-                $this->curl->post($fcmUrl, $fcmNotification);
-                $response = $this->curl->getBody();
-                $this->setSchedule($value['post_id']);
-                ++$i;
+            $imageUrl = $mediaUrl.'sparsh/push_notification/image'.$value['template_logo'];
+            $notification = [
+                'title' =>$value['template_title'],
+                'body' => $value['template_message'],
+                'icon' => $imageUrl,
+                'click_action' => $value['redirect_url'],
+                'sound' => 'mySound',
+                "templateId" =>$value['post_id'],
+                "utm_parameters" =>$value['utm_parameters']
+            ];
+            $fcmNotification = [
+                'registration_ids' => $tokens,
+                'data' => $notification
+            ];
+            $fcmNotification = json_encode($fcmNotification);
+            $headers = ["Authorization" => "key=".API_ACCESS_KEY, "Content-Type" => "application/json"];
+            $this->curl->setHeaders($headers);
+            $this->curl->post($fcmUrl, $fcmNotification);
+            $this->curl->getBody();
+            $this->setSchedule($value['post_id']);
+            ++$i;
         }
     }
     /**

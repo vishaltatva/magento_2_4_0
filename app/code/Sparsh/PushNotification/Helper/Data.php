@@ -14,10 +14,8 @@ namespace Sparsh\PushNotification\Helper;
 
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\App\Helper\Context;
 use Magento\Store\Model\ScopeInterface;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
  * Class Data
@@ -34,15 +32,7 @@ class Data extends AbstractHelper
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
-    /**
-     * @var \Magento\Framework\ObjectManagerInterface
-     */
-    protected $objectManager;
 
-    /**
-     * @var \Magento\Framework\App\Config\Storage\WriterInterface
-     */
-    protected $configWriter;
     /**
      * @var \Magento\Framework\App\Cache\TypeListInterface
      */
@@ -56,25 +46,23 @@ class Data extends AbstractHelper
      */
     protected $remoteAddress;
 
-    const XML_PATH_ENABLEPUSHNOTIFICATION='pushnotification/generalpushnotification/enablenotification';
-    const XML_PATH_APIKEY = 'pushnotification/generalpushnotification/apikey';
-    const XML_PATH_AUTHDOMAIN='pushnotification/generalpushnotification/authdomain';
-    const XML_PATH_DATABASEURL='pushnotification/generalpushnotification/databaseurl';
-    const XML_PATH_PROJECTID='pushnotification/generalpushnotification/projectid';
-    const XML_PATH_STORAGEBUCKET='pushnotification/generalpushnotification/storagebucket';
-    const XML_PATH_MESSAGESENDERID='pushnotification/generalpushnotification/messagingsenderid';
+    const XML_PATH_ENABLEPUSHNOTIFICATION='push_notification/general/enable';
+    const XML_PATH_APIKEY = 'push_notification/general/apikey';
+    const XML_PATH_AUTHDOMAIN='push_notification/general/authdomain';
+    const XML_PATH_DATABASEURL='push_notification/general/databaseurl';
+    const XML_PATH_PROJECTID='push_notification/general/projectid';
+    const XML_PATH_STORAGEBUCKET='push_notification/general/storagebucket';
+    const XML_PATH_MESSAGESENDERID='push_notification/general/messagingsenderid';
 
-    const XML_PATH_SERVER_KEY ='pushnotification/generalpushnotification/serverkey';
-    const XML_PATH_PROMPT_ENABLE='pushnotification/prompt/enable';
-    const XML_PATH_PROMPT_TEXT='pushnotification/prompt/prompt_text';
-    const XML_PATH_PROMPT_SHOW_DELAY='pushnotification/prompt/show_delay';
-    const XML_PATH_PROMPT_FREQUENCY='pushnotification/prompt/frequency';
-    const XML_PATH_PROMPT_PAGES='pushnotification/prompt/pages';
-    const XML_PATH_PROMPT_PAGE_URL='pushnotification/prompt/page_url';
+    const XML_PATH_SERVER_KEY ='push_notification/general/serverkey';
+    const XML_PATH_PROMPT_ENABLE='push_notification/prompt/enable';
+    const XML_PATH_PROMPT_TEXT='push_notification/prompt/prompt_text';
+    const XML_PATH_PROMPT_SHOW_DELAY='push_notification/prompt/show_delay';
+    const XML_PATH_PROMPT_FREQUENCY='push_notification/prompt/frequency';
+    const XML_PATH_PROMPT_PAGES='push_notification/prompt/pages';
+    const XML_PATH_PROMPT_PAGE_URL='push_notification/prompt/page_url';
     /**
      * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @param \Magento\Framework\App\Config\Storage\WriterInterface $configWriter
      * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $remoteAddress
@@ -82,16 +70,12 @@ class Data extends AbstractHelper
      */
     public function __construct(
         Context $context,
-        ObjectManagerInterface $objectManager,
-        \Magento\Framework\App\Config\Storage\WriterInterface $configWriter,
         \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $remoteAddress,
         StoreManagerInterface $storeManager
     ) {
-        $this->objectManager = $objectManager;
         $this->storeManager  = $storeManager;
-        $this->configWriter = $configWriter;
         $this->cacheTypeList = $cacheTypeList;
         $this->customerSession = $customerSession;
         $this->remoteAddress = $remoteAddress;

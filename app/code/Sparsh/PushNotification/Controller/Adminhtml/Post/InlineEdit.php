@@ -63,9 +63,10 @@ abstract class InlineEdit extends \Magento\Backend\App\Action
         $error = false;
         $messages = [];
         $postItems = $this->getRequest()->getParam('items', []);
+
         if (!($this->getRequest()->getParam('isAjax') && count($postItems))) {
             return $resultJson->setData([
-                'messages' => [__('Please correct the data sent.')],
+                'messages' => [__('Something went wrong while saving the template.')],
                 'error' => true,
             ]);
         }
@@ -75,16 +76,13 @@ abstract class InlineEdit extends \Magento\Backend\App\Action
                 $postData = $postItems[$postId];
                 $post->addData($postData);
                 $post->save();
-            } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                $messages[] = $this->getErrorWithPostId($post, $e->getMessage());
-                $error = true;
             } catch (\RuntimeException $e) {
                 $messages[] = $this->getErrorWithPostId($post, $e->getMessage());
                 $error = true;
             } catch (\Exception $e) {
                 $messages[] = $this->getErrorWithPostId(
                     $post,
-                    __('Something went wrong while saving the Post.')
+                    __('Something went wrong while saving the template.')
                 );
                 $error = true;
             }
@@ -104,6 +102,6 @@ abstract class InlineEdit extends \Magento\Backend\App\Action
      */
     protected function getErrorWithPostId(\Sparsh\PushNotification\Model\Post $post, $errorText)
     {
-        return '[Post ID: ' . $post->getId() . '] ' . $errorText;
+        return '[Template ID: ' . $post->getId() . '] ' . $errorText;
     }
 }

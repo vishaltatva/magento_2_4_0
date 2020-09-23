@@ -28,7 +28,7 @@ class Image
      *
      * @var string
      */
-    protected $_subDir = 'sparsh/pushnotification/post';
+    protected $_subDir = 'sparsh/push_notification';
 
     /**
      * URL builder

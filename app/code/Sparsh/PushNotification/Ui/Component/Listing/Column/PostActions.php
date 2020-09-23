@@ -28,14 +28,14 @@ class PostActions extends \Magento\Ui\Component\Listing\Columns\Column
      *
      * @var string
      */
-    const URL_PATH_EDIT = 'sparsh_pushnotification/post/edit';
+    const URL_PATH_EDIT = 'sparsh_push_notification/post/edit';
 
     /**
      * Url path  to delete
      *
      * @var string
      */
-    const URL_PATH_DELETE = 'sparsh_pushnotification/post/delete';
+    const URL_PATH_DELETE = 'sparsh_push_notification/post/delete';
 
     /**
      * URL builder
@@ -94,8 +94,8 @@ class PostActions extends \Magento\Ui\Component\Listing\Columns\Column
                             ),
                             'label' => __('Delete'),
                             'confirm' => [
-                                'title' => __('Delete "${ $.$data.name }"'),
-                                'message' => __('Are you sure you wan\'t to delete the Post "${ $.$data.name }" ?')
+                                'title' => __('Delete'),
+                                'message' => __('Are you sure, you want to delete this template?')
                             ]
                         ]
                     ];

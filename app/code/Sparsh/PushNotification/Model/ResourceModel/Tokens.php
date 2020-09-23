@@ -51,7 +51,7 @@ class Tokens extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     protected function _construct()
     {
-        $this->_init('sparsh_pushnotification_tokens', 'token_id');
+        $this->_init('sparsh_push_notification_tokens', 'token_id');
     }
 
     /**

@@ -31,13 +31,6 @@ class Save extends \Sparsh\PushNotification\Controller\Adminhtml\Post
     protected $_uploadModel;
 
     /**
-     * File model
-     *
-     * @var \Sparsh\PushNotification\Model\Post\File
-     */
-    protected $_fileModel;
-
-    /**
      * Image model
      *
      * @var \Sparsh\PushNotification\Model\Post\Image
@@ -55,7 +48,6 @@ class Save extends \Sparsh\PushNotification\Controller\Adminhtml\Post
      * constructor
      *
      * @param \Sparsh\PushNotification\Model\Upload $uploadModel
-     * @param \Sparsh\PushNotification\Model\Post\File $fileModel
      * @param \Sparsh\PushNotification\Model\Post\Image $imageModel
      * @param \Magento\Backend\Model\Session $backendSession
      * @param \Sparsh\PushNotification\Model\PostFactory $postFactory
@@ -65,7 +57,6 @@ class Save extends \Sparsh\PushNotification\Controller\Adminhtml\Post
      */
     public function __construct(
         \Sparsh\PushNotification\Model\Upload $uploadModel,
-        \Sparsh\PushNotification\Model\Post\File $fileModel,
         \Sparsh\PushNotification\Model\Post\Image $imageModel,
         \Magento\Backend\Model\Session $backendSession,
         \Sparsh\PushNotification\Model\PostFactory $postFactory,
@@ -74,7 +65,6 @@ class Save extends \Sparsh\PushNotification\Controller\Adminhtml\Post
         \Magento\Backend\App\Action\Context $context
     ) {
         $this->_uploadModel    = $uploadModel;
-        $this->_fileModel      = $fileModel;
         $this->_imageModel     = $imageModel;
         $this->_backendSession = $backendSession;
         parent::__construct($postFactory, $registry, $resultRedirectFactory, $context);
@@ -89,41 +79,30 @@ class Save extends \Sparsh\PushNotification\Controller\Adminhtml\Post
     {
         $data = $this->getRequest()->getPost('post');
         $resultRedirect = $this->resultRedirectFactory->create();
+
         if ($data) {
             $data = $this->_filterData($data);
             $post = $this->_initPost();
+
             $data['store_view'] = implode(",", $data['store_view']);
             $data['customer_groups'] = implode(",", $data['customer_groups']);
-            if ($data['status']) {
-                $data['schedule_status'] = 0;
-            }
-            if (!$data['status']) {
-                $data['schedule_status'] = 2;
-            }
-            if (!isset($data['post_id']) && !$data['status']) {
-                $data['schedule_status'] = 0;
-            }
+
             $post->setData($data);
+
             $featuredImage = $this->_uploadModel->uploadFileAndGetName(
                 'template_logo',
                 $this->_imageModel->getBaseDir(),
                 $data
             );
             $post->setTemplateLogo($featuredImage);
-            $this->_eventManager->dispatch(
-                'sparsh_pushnotification_post_prepare_save',
-                [
-                    'post' => $post,
-                    'request' => $this->getRequest()
-                ]
-            );
+
             try {
                 $post->save();
                 $this->messageManager->addSuccess(__('The Template has been saved.'));
                 $this->_backendSession->setSparshPushNotificationPostData(false);
                 if ($this->getRequest()->getParam('back')) {
                     $resultRedirect->setPath(
-                        'sparsh_pushnotification/*/edit',
+                        'sparsh_push_notification/*/edit',
                         [
                             'post_id' => $post->getId(),
                             '_current' => true
@@ -131,18 +110,16 @@ class Save extends \Sparsh\PushNotification\Controller\Adminhtml\Post
                     );
                     return $resultRedirect;
                 }
-                $resultRedirect->setPath('sparsh_pushnotification/*/');
+                $resultRedirect->setPath('sparsh_push_notification/*/');
                 return $resultRedirect;
-            } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                $this->messageManager->addError($e->getMessage());
             } catch (\RuntimeException $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
-                $this->messageManager->addException($e, __('Something went wrong while saving the Template.'));
+                $this->messageManager->addException($e, __('Something went wrong while saving the template.'));
             }
             $this->_getSession()->setSparshPushNotificationPostData($data);
             $resultRedirect->setPath(
-                'sparsh_pushnotification/*/edit',
+                'sparsh_push_notification/*/edit',
                 [
                     'post_id' => $post->getId(),
                     '_current' => true
@@ -150,7 +127,7 @@ class Save extends \Sparsh\PushNotification\Controller\Adminhtml\Post
             );
             return $resultRedirect;
         }
-        $resultRedirect->setPath('sparsh_pushnotification/*/');
+        $resultRedirect->setPath('sparsh_push_notification/*/');
         return $resultRedirect;
     }
 

@@ -21,7 +21,6 @@ namespace Sparsh\PushNotification\Model;
  * @method Post setFeaturedImage($featuredImage)
  * @method Post setSampleCountrySelection($sampleCountrySelection)
  * @method Post setSampleUploadFile($sampleUploadFile)
- * @method Post setSampleMultiselect($sampleMultiselect)
  * @method mixed getName()
  * @method mixed getUrlKey()
  * @method mixed getPostContent()
@@ -30,7 +29,6 @@ namespace Sparsh\PushNotification\Model;
  * @method mixed getFeaturedImage()
  * @method mixed getSampleCountrySelection()
  * @method mixed getSampleUploadFile()
- * @method mixed getSampleMultiselect()
  * @method Post setCreatedAt(\string $createdAt)
  * @method string getCreatedAt()
  * @method Post setUpdatedAt(\string $updatedAt)
@@ -52,21 +50,21 @@ class Post extends \Magento\Framework\Model\AbstractModel
      *
      * @var string
      */
-    const CACHE_TAG = 'sparsh_pushnotification_post';
+    const CACHE_TAG = 'sparsh_push_notification_post';
 
     /**
      * Cache tag
      *
      * @var string
      */
-    protected $_cacheTag = 'sparsh_pushnotification_post';
+    protected $_cacheTag = 'sparsh_push_notification_post';
 
     /**
      * Event prefix
      *
      * @var string
      */
-    protected $_eventPrefix = 'sparsh_pushnotification_post';
+    protected $_eventPrefix = 'sparsh_push_notification_post';
 
     /**
      * Initialize resource model

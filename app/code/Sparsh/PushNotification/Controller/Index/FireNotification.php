@@ -80,7 +80,7 @@ class FireNotification extends \Magento\Framework\App\Action\Action
             $model->save();
         } catch (\Exception $e) {
             $this->messageManager->addError(
-                __('We can\'t increment count right now. Sorry, that\'s all we know.')
+                __('Something went wrong. We can\'t update count right now.')
             );
         }
     }

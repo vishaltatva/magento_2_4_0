@@ -21,7 +21,6 @@ namespace Sparsh\PushNotification\Model;
  * @method Tokens setFeaturedImage($featuredImage)
  * @method Tokens setSampleCountrySelection($sampleCountrySelection)
  * @method Tokens setSampleUploadFile($sampleUploadFile)
- * @method Tokens setSampleMultiselect($sampleMultiselect)
  * @method mixed getName()
  * @method mixed getUrlKey()
  * @method mixed getTokensContent()
@@ -30,7 +29,6 @@ namespace Sparsh\PushNotification\Model;
  * @method mixed getFeaturedImage()
  * @method mixed getSampleCountrySelection()
  * @method mixed getSampleUploadFile()
- * @method mixed getSampleMultiselect()
  * @method Tokens setCreatedAt(\string $createdAt)
  * @method string getCreatedAt()
  * @method Tokens setUpdatedAt(\string $updatedAt)
@@ -52,21 +50,21 @@ class Tokens extends \Magento\Framework\Model\AbstractModel
      *
      * @var string
      */
-    const CACHE_TAG = 'sparsh_pushnotification_tokens';
+    const CACHE_TAG = 'sparsh_push_notification_tokens';
 
     /**
      * Cache tag
      *
      * @var string
      */
-    protected $_cacheTag = 'sparsh_pushnotification_tokens';
+    protected $_cacheTag = 'sparsh_push_notification_tokens';
 
     /**
      * Event prefix
      *
      * @var string
      */
-    protected $_eventPrefix = 'sparsh_pushnotification_tokens';
+    protected $_eventPrefix = 'sparsh_push_notification_tokens';
 
     /**
      * Initialize resource model

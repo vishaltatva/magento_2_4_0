@@ -33,31 +33,21 @@ class Delete extends \Sparsh\PushNotification\Controller\Adminhtml\Tokens
         $resultRedirect = $this->_resultRedirectFactory->create();
         $id = $this->getRequest()->getParam('token_id');
         if ($id) {
-            $name = "";
             try {
                 $tokens = $this->_postFactory->create();
                 $tokens->load($id);
-                $name = $tokens->getName();
                 $tokens->delete();
-                $this->messageManager->addSuccess(__('The Template has been deleted.'));
-                $this->_eventManager->dispatch(
-                    'adminhtml_sparsh_pushnotification_tokens_on_delete',
-                    ['name' => $name, 'status' => 'success']
-                );
-                $resultRedirect->setPath('sparsh_pushnotification/*/');
+                $this->messageManager->addSuccess(__('The device token has been deleted.'));
+                $resultRedirect->setPath('sparsh_push_notification/*/');
                 return $resultRedirect;
             } catch (\Exception $e) {
-                $this->_eventManager->dispatch(
-                    'adminhtml_sparsh_pushnotification_tokens_on_delete',
-                    ['name' => $name, 'status' => 'fail']
-                );
                 $this->messageManager->addError($e->getMessage());
-                $resultRedirect->setPath('sparsh_pushnotification/*/edit', ['token_id' => $id]);
+                $resultRedirect->setPath('sparsh_push_notification/*/', ['token_id' => $id]);
                 return $resultRedirect;
             }
         }
-        $this->messageManager->addError(__('Template to delete was not found.'));
-        $resultRedirect->setPath('sparsh_pushnotification/*/');
+        $this->messageManager->addError(__('Device token to delete was not found.'));
+        $resultRedirect->setPath('sparsh_push_notification/*/');
         return $resultRedirect;
     }
 }

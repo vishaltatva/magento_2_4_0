@@ -34,7 +34,7 @@ messaging.setBackgroundMessageHandler(function(payload) {
 });
 
 self.addEventListener('notificationclick', (event) => {
-    var url = baseUrl+"/pushnotification/index/FireNotification?id="+event.notification.data.id;
+    var url = baseUrl+"/push_notification/index/FireNotification?id="+event.notification.data.id;
     event.waitUntil(
         fetch(url)
         .then(function(response) {

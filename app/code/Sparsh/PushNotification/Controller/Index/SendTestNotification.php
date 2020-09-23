@@ -64,7 +64,6 @@ class SendTestNotification extends \Magento\Framework\App\Action\Action
 
     public function execute()
     {
-
         $post = $this->getRequest()->getPostValue();
 
         if (!$post) {
@@ -78,34 +77,34 @@ class SendTestNotification extends \Magento\Framework\App\Action\Action
             $mediaUrl=$this->storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA);
             $templateId = $post['templateId'];
             $postCollections = $this->postFactory->create()->getCollection()
-                                      ->addFieldToFilter('post_id', $templateId);
+                ->addFieldToFilter('post_id', $templateId);
             $templateData = [];
             foreach ($postCollections as $value) {
                 $templateData['template_title'] = $value->getTemplateTitle();
-                $templateData['template_messege'] =$value->getTemplateMessege();
+                $templateData['template_message'] =$value->getTemplateMessage();
                 $templateData['redirect_url'] = $value->getRedirectUrl();
                 $templateData['template_logo'] = $value->getTemplateLogo();
             }
             if (isset($templateData['template_logo'])) {
-                $imageUrl = $mediaUrl.'sparsh/pushnotification/post/image'.$templateData['template_logo'];
+                $imageUrl = $mediaUrl.'sparsh/push_notification/image'.$templateData['template_logo'];
             } else {
                 $imageUrl = '';
             }
             $notification = [
                 'title' =>$templateData['template_title'],
-                'body' => $templateData['template_messege'],
+                'body' => $templateData['template_message'],
                 'icon' => $imageUrl,
                 'click_action' => $templateData['redirect_url'],
             ];
-    
+
             $resultJson = $this->resultJsonFactory->create();
             return $resultJson->setData([
                 'template' => $notification
             ]);
-            
+
         } catch (\Exception $e) {
             $this->messageManager->addError(
-                __('We can\'t process send Test Notification right now.')
+                __('Something went wrong.')
             );
         }
     }

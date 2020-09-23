@@ -1,0 +1,261 @@
+<?php
+$helper = $this->helper('Sparsh\PushNotification\Helper\Data');
+$mediaUrl = $helper->getMediaUrl();
+$baseUrl = $helper->getBaseUrl();
+$isEnable = $helper->getEnablePushNotification();
+$apiKey = $helper->getApiKey();
+$authDomain = $helper->getAuthdomain();
+$databaseURL= $helper->getDatabaseUrl();
+$projectId = $helper->getProjectId();
+$storageBucket = $helper->getStorageBucket();
+$messagingSenderId = $helper->getMessageSenderId();
+
+$promptEnable = $helper->getPromptEnable();
+$promptText = $helper->getPromptText();
+$showDelaySeconds = $helper->getShowDelaySeconds();
+$frequency = $helper->getFrequency();
+$pages = $helper->getPages();
+$pageUrl = $helper->getPageUrl();
+$ip = $helper->getIp();
+$customerId = $helper->getCustomerId();
+$currentUrl=$this->getUrl('*/*/*', ['_current' => true, '_use_rewrite' => true]);
+
+if ($isEnable == 1) { ?>
+    <div style="display: none;">
+        <a href="#" id="sparsh-push-notification-click-me">Click Me</a>
+    </div>
+    <div id="sparsh-push-notification-popup-modal">
+        <?= $promptText; ?>
+    </div>
+    <script type="text/javascript">
+        require(['jquery','Magento_Ui/js/modal/modal', 'firebase','jquery/jquery.cookie'], function ($,modal) {
+            var sparshPushNotificationIp = <?="'".$ip."'";?>;
+            var sparshPushNotificationCustomerId = <?="'".$customerId."'";?>;
+            var sparshPushNotificationOptions = {
+                type: 'popup',
+                modalClass:'sparsh-push-notification-wrapper',
+                responsive: true,
+                innerScroll: true,
+                buttons: [
+                    {
+                        text: $.mage.__('Allow'),
+                        class: 'action primary',
+                        click: function () {
+                            $.cookie("setModal", null, { expires : -1 });
+                            this.closeModal();
+                            if (!("Notification" in window)) {
+                            }else if (Notification.permission === "granted") {
+                                SparshPushNotificationServiceWorker();
+                            }else if (Notification.permission !== "denied") {
+                                Notification.requestPermission().then(function (permission) {
+                                    if (permission === "granted") {
+                                        SparshPushNotificationServiceWorker();
+                                    }
+                                });
+                            }
+                        }
+                    },
+                    {
+                        text: $.mage.__('Remind me later'),
+                        class: '',
+                        click: function () {
+                            this.closeModal();
+                            SparshPushNotificationServiceRemindLater();
+                        }
+                    }
+                ]
+            };
+
+            function SparshPushNotificationServiceCallPopup(){
+                if (Notification.permission === "granted") {
+                    SparshPushNotificationServiceWorker();
+                }else if (Notification.permission !== "denied") {
+                    if(<?= $pages;?>){
+                        setTimeout(function(){
+                            $("#sparsh-push-notification-click-me").trigger('click');
+                        },<?= $showDelaySeconds*1000; ?>);
+                    }else{
+                        <?php
+                        if (in_array($currentUrl, $pageUrl)) {
+                        ?>
+                        setTimeout(function(){
+                            $("#sparsh-push-notification-click-me").trigger('click');
+                        }, <?= $showDelaySeconds*1000; ?>);
+                        <?php
+                        }
+                        ?>
+                    }
+                }
+            }
+
+            function SparshPushNotificationServiceRemindLater(){
+                var currentDate = new Date();
+                $.cookie('setModal', currentDate);
+            }
+
+            function SparshPushNotificationDateDifference() {
+                var cookieDate = new Date($.cookie('setModal'));
+                var currentDate = new Date();
+                var diff = Math.abs(currentDate - cookieDate);
+
+                switch ('<?= $frequency;?>') {
+                    case 'ET':
+                        SparshPushNotificationServiceCallPopup();
+                        break;
+                    case 'H':
+                        var Hours = 1000 * 60 * 60;
+                        nHours=Math.floor(diff / Hours);
+                        if(nHours>0){
+                            SparshPushNotificationServiceCallPopup();
+                        }
+                        break;
+                    case 'D':
+                        var Day = 1000 * 60 * 60 * 24;
+                        nDays=Math.floor(diff / Day);
+                        if(nDays>0){
+                            SparshPushNotificationServiceCallPopup();
+                        }
+                        break;
+
+                    case 'W':
+                        var Week = 1000 * 60 * 60 * 24 * 7;
+                        nWeeks=Math.floor(diff / Week);
+                        if(nWeeks>0){
+                            SparshPushNotificationServiceCallPopup();
+                        }
+                        break;
+                }
+            }
+
+            var popup = modal(sparshPushNotificationOptions, $('#sparsh-push-notification-popup-modal'));
+            $( document ).ready(function() {
+                if(<?= $promptEnable;?>){
+                    if ($.cookie('setModal') != null){
+                        SparshPushNotificationDateDifference();
+                    }else{
+                        SparshPushNotificationServiceCallPopup();
+                    }
+                }else{
+                    if (!("Notification" in window)) {
+                    }else if (Notification.permission === "granted") {
+                        SparshPushNotificationServiceWorker();
+                    }else if (Notification.permission !== "denied") {
+                        Notification.requestPermission().then(function (permission) {
+                            if (permission === "granted") {
+                                SparshPushNotificationServiceWorker();
+                            }
+                        });
+                    }
+                }
+            });
+
+            $("#sparsh-push-notification-click-me").on('click',function(){
+                $("#sparsh-push-notification-popup-modal").modal("openModal");
+            });
+
+            var sparshPushNotificationConfig = {
+                apiKey: "<?= $apiKey; ?>",
+                authDomain: "<?= $authDomain; ?>",
+                databaseURL: "<?= $databaseURL; ?>",
+                projectId: "<?= $projectId; ?>",
+                storageBucket: "<?= $storageBucket; ?>",
+                messagingSenderId: "<?= $messagingSenderId; ?>"
+            };
+
+            firebase.initializeApp(sparshPushNotificationConfig);
+
+            function SparshPushNotificationServiceWorker() {
+                if ('serviceWorker' in navigator) {
+                    var baseUrl = <?= "'".$baseUrl."'"; ?>;
+                    var apiKey = <?= "'".$apiKey."'"; ?>;
+                    var authDomain = <?= "'".$authDomain."'"; ?>;
+                    var databaseURL = <?= "'".$databaseURL."'"; ?>;
+                    var projectId = <?= "'".$projectId."'"; ?>;
+                    var storageBucket = <?= "'".$storageBucket."'"; ?>;
+                    var messagingSenderId = <?= "'".$messagingSenderId."'"; ?>;
+                    var swUrl = <?= "'".$block->getViewFileUrl('Sparsh_PushNotification::js/firebase-messaging-sw.js')."'";?>;
+                    navigator.serviceWorker
+                        .register(swUrl+'?baseUrl='+baseUrl+'&apiKey='+apiKey+'&authDomain='+authDomain+'&databaseURL='+databaseURL+'&projectId='+projectId+'&storageBucket='+storageBucket+'&messagingSenderId='+messagingSenderId)
+                        .then((registration) => {
+                            firebase.messaging().useServiceWorker(registration);
+                            firebase.messaging().requestPermission();
+                            var token = firebase.messaging().getToken();
+                            var p = Promise.resolve(token);
+                            p.then(function(t) {
+                                setTimeout(function(){
+                                    SparshPushNotificationRegisterToken(t);
+                                },1000);
+                            });
+                            firebase.messaging().onMessage(payload => {
+                                const title = payload.data.title;
+                                const options = {
+                                    body: payload.data.body,
+                                    icon: payload.data.icon,
+                                    data: {
+                                        url:payload.data.click_action ,
+                                        id: payload.data.templateId,
+                                        utm:payload.data.utm_parameters
+                                    }
+                                };
+                                if (!("Notification" in window)) {
+                                } else if (Notification.permission === "granted") {
+                                    registration.showNotification(title,options);
+                                }
+                            });
+                        })
+                        .catch(function(err) {
+                        });
+                }
+            }
+
+            function SparshPushNotificationRegisterToken(token) {
+                var browser = function () {
+                    if (browser.prototype._cachedResult)
+                        return browser.prototype._cachedResult;
+
+                    var isOpera = (!!window.opr && !!opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
+
+                    var isFirefox = typeof InstallTrigger !== 'undefined';
+
+                    var isSafari = /constructor/i.test(window.HTMLElement) || (function (p) {
+                        return p.toString() === "[object SafariRemoteNotification]";
+                    })(!window['safari'] || safari.pushNotification);
+
+                    var isIE = /*@cc_on!@*/false || !!document.documentMode;
+
+                    var isEdge = !isIE && !!window.StyleMedia;
+
+                    var isChrome = !!window.chrome && !!window.chrome.webstore;
+
+                    var isBlink = (isChrome || isOpera) && !!window.CSS;
+
+                    return browser.prototype._cachedResult =
+                        isOpera ? 'Opera' :
+                            isFirefox ? 'Firefox' :
+                                isSafari ? 'Safari' :
+                                    isChrome ? 'Chrome' :
+                                        isIE ? 'IE' :
+                                            isEdge ? 'Edge' :
+                                                "Other";
+                };
+                var postForm = {
+                    'token': token,
+                    'device': browser(),
+                    'ip':sparshPushNotificationIp,
+                    'CustomerId':sparshPushNotificationCustomerId
+                };
+
+                $.ajax({
+                    url: "push_notification/index/RegisterDevice",
+                    type: "post",
+                    data: postForm,
+                    dataType: 'json',
+                    success: function (response) {
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                    }
+                });
+            }
+        });
+    </script>
+<?php } ?>

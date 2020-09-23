@@ -2,7 +2,7 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="before.body.end">
-	<block class="Sparsh\PushNotification\Block\Tokens" before="-" name="pushnotification" cacheable="false" template="Sparsh_PushNotification::html/pushnotification.phtml"/>
+	<block class="Sparsh\PushNotification\Block\Tokens" before="-" name="sparsh_push_notification" template="Sparsh_PushNotification::html/push_notification.phtml"/>
 		</referenceContainer>
     </body>
 </page>

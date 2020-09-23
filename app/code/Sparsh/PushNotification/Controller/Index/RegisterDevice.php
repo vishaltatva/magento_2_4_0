@@ -57,7 +57,6 @@ class RegisterDevice extends \Magento\Framework\App\Action\Action
 
     public function execute()
     {
-
         $post = $this->getRequest()->getPostValue();
 
         if (!$post) {
@@ -71,42 +70,46 @@ class RegisterDevice extends \Magento\Framework\App\Action\Action
             $token = $post['token'];
             $device = $post['device'];
             $ip = $post['ip'];
-            $CustomerId = $post['CustomerId'];
+            $customerId = $post['CustomerId'];
+
             $model = $this->tokensFactory->create();
             $connection = $this->_resource->getConnection();
 
             $select = $connection->select()
-                            ->from(
-                                ['o' => $this->_resource->getTableName('sparsh_pushnotification_tokens')]
-                            )->where('o.ip=?', $ip);
+            ->from(
+                ['o' => $this->_resource->getTableName('sparsh_push_notification_tokens')]
+            )
+                ->where('o.ip=?', $ip)
+                ->where('o.device=?', $device);
 
-             $result = count($connection->fetchAll($select));
+
+            $result = count($connection->fetchAll($select));
 
             if ($result > 0) {
                 $data = $connection->fetchAll($select);
                 $tokenData = $data[0];
-                if (($CustomerId == $tokenData['customer_id']) && ($token == $tokenData['token'])) {
-                    $response = 'Token is already added..!!';
+                if (($customerId == $tokenData['customer_id']) && ($token == $tokenData['token'])) {
+                    $response = 'Device token is already added..!!';
                 } else {
                     $model->load($tokenData['token_id']);
-                    if (($CustomerId == $tokenData['customer_id'])) {
+                    if (($customerId == $tokenData['customer_id'])) {
                         $model->setToken($token);
                     }
-                    if (($CustomerId != $tokenData['customer_id'])) {
-                           $model->setCustomerId($CustomerId);
+                    if (($customerId != $tokenData['customer_id'])) {
+                           $model->setCustomerId($customerId);
                            $model->setToken($token);
                     }
                     $model->save();
-                    $response = 'Token is Update Record..!!';
+                    $response = 'Device token is updated!!';
                 }
                 $success = false;
             } else {
                 $model->setToken($token);
                 $model->setDevice($device);
                 $model->setIp($ip);
-                $model->setCustomerId($CustomerId);
+                $model->setCustomerId($customerId);
                 $model->save();
-                $response = 'Token is successfully added..!!';
+                $response = 'Device token is successfully added!!';
                 $success = true;
             }
              $resultJson = $this->resultJsonFactory->create();
@@ -116,7 +119,7 @@ class RegisterDevice extends \Magento\Framework\App\Action\Action
              ]);
         } catch (\Exception $e) {
             $this->messageManager->addError(
-                __('We can\'t register token request right now. Sorry, that\'s all we know.')
+                __('Something went wrong. We can\'t register device token right now.')
             );
         }
     }

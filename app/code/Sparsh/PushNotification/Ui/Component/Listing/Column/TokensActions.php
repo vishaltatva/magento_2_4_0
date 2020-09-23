@@ -24,18 +24,11 @@ namespace Sparsh\PushNotification\Ui\Component\Listing\Column;
 class TokensActions extends \Magento\Ui\Component\Listing\Columns\Column
 {
     /**
-     * Url path  to edit
-     *
-     * @var string
-     */
-    const URL_PATH_EDIT = 'sparsh_pushnotification/tokens/edit';
-
-    /**
      * Url path  to delete
      *
      * @var string
      */
-    const URL_PATH_DELETE = 'sparsh_pushnotification/tokens/delete';
+    const URL_PATH_DELETE = 'sparsh_push_notification/tokens/delete';
 
     /**
      * URL builder
@@ -83,10 +76,10 @@ class TokensActions extends \Magento\Ui\Component\Listing\Columns\Column
                                     'token_id' => $item['token_id']
                                 ]
                             ),
-                            'label' => __('Remove'),
+                            'label' => __('Delete'),
                             'confirm' => [
-                                'title' => __('Delete "${ $.$data.name }"'),
-                                'message' => __('Are you sure you wan\'t to delete the Tokens "${ $.$data.name }" ?')
+                                'title' => __('Delete'),
+                                'message' => __('Are you sure, you want to delete this token?')
                             ]
                         ]
                     ];

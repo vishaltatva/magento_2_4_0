@@ -45,14 +45,19 @@ class Edit extends \Sparsh\PushNotification\Controller\Adminhtml\Post
     protected $_resultJsonFactory;
 
     /**
-     * constructor
-     *
+     * @var \Sparsh\PushNotification\Helper\Data
+     */
+    private $data;
+
+    /**
+     * Edit constructor.
      * @param \Magento\Backend\Model\Session $backendSession
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Sparsh\PushNotification\Model\PostFactory $postFactory
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
+     * @param \Sparsh\PushNotification\Helper\Data $data
      * @param \Magento\Backend\App\Action\Context $context
      */
     public function __construct(
@@ -62,11 +67,13 @@ class Edit extends \Sparsh\PushNotification\Controller\Adminhtml\Post
         \Sparsh\PushNotification\Model\PostFactory $postFactory,
         \Magento\Framework\Registry $registry,
         \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
+        \Sparsh\PushNotification\Helper\Data $data,
         \Magento\Backend\App\Action\Context $context
     ) {
         $this->_backendSession    = $backendSession;
         $this->_resultPageFactory = $resultPageFactory;
         $this->_resultJsonFactory = $resultJsonFactory;
+        $this->data = $data;
         parent::__construct($postFactory, $registry, $resultRedirectFactory, $context);
     }
 
@@ -85,20 +92,23 @@ class Edit extends \Sparsh\PushNotification\Controller\Adminhtml\Post
      */
     public function execute()
     {
+        $resultRedirect = $this->resultRedirectFactory->create();
+        if ($this->data->getEnablePushNotification() == 0) {
+            return $resultRedirect->setPath('admin/dashboard/index', ['_current' => true]);
+        }
+
         $id = $this->getRequest()->getParam('post_id');
         $post = $this->_initPost();
         $resultPage = $this->_resultPageFactory->create();
-        $resultPage->setActiveMenu('Sparsh_PushNotification::post');
-        $resultPage->getConfig()->getTitle()->set(__('Templates'));
+
         if ($id) {
             $post->load($id);
             if (!$post->getId()) {
-                $this->messageManager->addError(__('This Post no longer exists.'));
+                $this->messageManager->addError(__('This template no longer exists.'));
                 $resultRedirect = $this->_resultRedirectFactory->create();
                 $resultRedirect->setPath(
-                    'sparsh_pushnotification/*/edit',
+                    'sparsh_push_notification/*',
                     [
-                        'post_id' => $post->getId(),
                         '_current' => true
                     ]
                 );
@@ -107,7 +117,8 @@ class Edit extends \Sparsh\PushNotification\Controller\Adminhtml\Post
         }
         $title = $post->getId() ? $post->getName() : __('New Template');
         $resultPage->getConfig()->getTitle()->prepend($title);
-        $data = $this->_backendSession->getData('sparsh_pushnotification_post_data', true);
+        $resultPage->setActiveMenu('Sparsh_PushNotification::push_notification');
+        $data = $this->_backendSession->getData('sparsh_push_notification_post_data', true);
         if (!empty($data)) {
             $post->setData($data);
         }

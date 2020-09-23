@@ -63,20 +63,4 @@ abstract class Tokens extends \Magento\Backend\App\Action
         $this->_resultRedirectFactory = $resultRedirectFactory;
         parent::__construct($context);
     }
-
-    /**
-     * Init Tokens
-     *
-     * @return \Sparsh\PushNotification\Model\Tokens
-     */
-    protected function _initTokens()
-    {
-        $tokensId  = (int) $this->getRequest()->getParam('token_id');
-        $tokens    = $this->_postFactory->create();
-        if ($tokensId) {
-            $tokens->load($tokensId);
-        }
-        $this->_coreRegistry->register('sparsh_pushnotification_tokens', $tokens);
-        return $tokens;
-    }
 }

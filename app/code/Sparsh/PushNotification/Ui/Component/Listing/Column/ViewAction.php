@@ -12,7 +12,6 @@
  */
 namespace Sparsh\PushNotification\Ui\Component\Listing\Column;
 
-use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Ui\Component\Listing\Columns\Column;
@@ -28,30 +27,19 @@ use Magento\Ui\Component\Listing\Columns\Column;
  */
 class ViewAction extends Column
 {
-    public $urlBuilder;
-
     public $layout;
 
     public function __construct(
         ContextInterface $context,
         UiComponentFactory $uiComponentFactory,
-        UrlInterface $urlBuilder,
         \Magento\Framework\View\LayoutInterface $layout,
         array $components = [],
         array $data = []
     ) {
-           $this->urlBuilder = $urlBuilder;
            $this->layout = $layout;
            parent::__construct($context, $uiComponentFactory, $components, $data);
     }
 
-    public function getViewUrl()
-    {
-        return $this->urlBuilder->getUrl(
-            $this->getData('config/viewUrlPath')
-        );
-    }
-  
     public function prepareDataSource(array $dataSource)
     {
         if (isset($dataSource['data']['items'])) {
@@ -61,13 +49,13 @@ class ViewAction extends Column
                         \Magento\Backend\Block\Widget\Button::class,
                         '',
                         [
-                         'data' => [
-                          'label' => __('Send Test Notification'),
-                          'type' => 'button',
-                          'disabled' => false,
-                          'class' => 'pushnotification-grid-view',
-                          'onclick' => 'pushnotification.open(\''. $this->getViewUrl().'\', \''.$item['post_id'].'\')',
-                         ]
+                            'data' => [
+                                'label' => __('Send Test Notification'),
+                                'type' => 'button',
+                                'disabled' => false,
+                                'class' => 'push_notification-grid-view',
+                                'onclick' => 'push_notification.open(\''.$item['post_id'].'\')',
+                            ]
                         ]
                     )->toHtml();
                 }

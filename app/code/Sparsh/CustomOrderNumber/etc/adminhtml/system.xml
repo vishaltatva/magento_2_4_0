@@ -1,0 +1,242 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="sparsh" translate="label" sortOrder="500">
+            <label>Sparsh Extensions</label>
+        </tab>
+        <section id="sparsh_customordernumber" translate="label" sortOrder="1" showInStore="1" showInWebsite="1" showInDefault="1">
+            <class>separator-top</class>
+            <label>Custom Order Number</label>
+            <tab>sparsh</tab>
+            <resource>Sparsh_CustomOrderNumber::config_customordernumber</resource>
+            <group id="general" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>General Configuration</label>
+                <field id="enable_customordernumber" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Enable Custom Order Number</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+            </group>
+            <group id="order" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Order Configuration</label>
+                <field id="enable_customordernumber_order" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Enable Custom Order Number for Order</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="order_number_format" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Order Number Format</label>
+                    <depends>
+                        <field id="enable_customordernumber_order">1</field>
+                    </depends>
+                    <comment>The following variables can be used to create format: {d}, {dd}, {m}, {mm}, {yy}, {yyyy}, {store_id}, {counter}</comment>
+                </field>
+                <field id="order_counter_start_from" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Counter Start From</label>
+                    <depends>
+                        <field id="enable_customordernumber_order">1</field>
+                    </depends>
+                    <comment>This configures from which number the {counter} variable begins counting.</comment>
+                </field>
+                <field id="order_counter_increment_by" translate="label" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Counter Increment By</label>
+                    <depends>
+                        <field id="enable_customordernumber_order">1</field>
+                    </depends>
+                    <comment>If set to 5, the {counter} variable increases by 5 for every new order placed. If the last number is 1020, the next number will be 1025.</comment>
+                </field>
+                <field id="order_counter_number_padding" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Counter Number Padding</label>
+                    <depends>
+                        <field id="enable_customordernumber_order">1</field>
+                    </depends>
+                    <comment>Total number of digits in the {counter} variable. If the counter is at 12 and padding is 4, the result will be 0012. Set to 0(zero) not to add leading zeros.</comment>
+                </field>
+            </group>
+            <group id="invoice" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Invoice Configuration</label>
+                <field id="enable_customordernumber_invoice" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Enable Custom Order Number for Invoice</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="invoice_same_as_order_number" translate="label" type="select" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Same as Order Number</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends>
+                        <field id="enable_customordernumber_invoice">1</field>
+                    </depends>
+                    <comment>If set to yes, the invoice number will have same increment number as order. If order number is 'ORD-0001' then the invoice number will be 'INV-0001'.</comment>
+                </field>
+                <field id="invoice_order_part" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Replace Order Part with Invoice Part</label>
+                    <depends>
+                        <field id="enable_customordernumber_invoice">1</field>
+                        <field id="invoice_same_as_order_number">1</field>
+                    </depends>
+                    <comment>If you have the order format 'ORD-{counter}', then you can replace 'ORD' text with below invoice field's text but you can not replace variables.</comment>
+                </field>
+                <field id="invoice_part" translate="label" type="text" sortOrder="3" showInDefault="4" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Invoice Part</label>
+                    <depends>
+                        <field id="enable_customordernumber_invoice">1</field>
+                        <field id="invoice_same_as_order_number">1</field>
+                    </depends>
+                </field>
+                <field id="invoice_number_format" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Invoice Number Format</label>
+                    <depends>
+                        <field id="enable_customordernumber_invoice">1</field>
+                        <field id="invoice_same_as_order_number">0</field>
+                    </depends>
+                    <comment>The following variables can be used to create format: {d}, {dd}, {m}, {mm}, {yy}, {yyyy}, {store_id}, {counter}</comment>
+                </field>
+                <field id="invoice_counter_start_from" translate="label" type="text" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Counter Start From</label>
+                    <depends>
+                        <field id="enable_customordernumber_invoice">1</field>
+                        <field id="invoice_same_as_order_number">0</field>
+                    </depends>
+                    <comment>This configures from which number the {counter} variable begins counting.</comment>
+                </field>
+                <field id="invoice_counter_increment_by" translate="label" type="text" sortOrder="7" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Counter Increment By</label>
+                    <depends>
+                        <field id="enable_customordernumber_invoice">1</field>
+                        <field id="invoice_same_as_order_number">0</field>
+                    </depends>
+                    <comment>If set to 5, the {counter} variable increases by 1 for every new invoice created. If the last number is 1020, the next number will be 1025.</comment>
+                </field>
+                <field id="invoice_counter_number_padding" translate="label" type="text" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Counter Number Padding</label>
+                    <depends>
+                        <field id="enable_customordernumber_invoice">1</field>
+                        <field id="invoice_same_as_order_number">0</field>
+                    </depends>
+                    <comment>Total number of digits in the {counter} variable. If the counter is at 12 and padding is 4, the result will be 0012. Set to 0(zero) not to add leading zeros.</comment>
+                </field>
+            </group>
+            <group id="shipment" translate="label" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Shipment Configuration</label>
+                <field id="enable_customordernumber_shipment" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Enable Custom Order Number for Shipment</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="shipment_same_as_order_number" translate="label" type="select" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Same as Order Number</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends>
+                        <field id="enable_customordernumber_shipment">1</field>
+                    </depends>
+                    <comment>If set to yes, the shipment number will have same increment number as order. If order number is 'ORD-0001' then the shipment number will be 'SHI-0001'.</comment>
+                </field>
+                <field id="shipment_order_part" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Replace Order Part with Shipment Part</label>
+                    <depends>
+                        <field id="enable_customordernumber_shipment">1</field>
+                        <field id="shipment_same_as_order_number">1</field>
+                    </depends>
+                    <comment>If you have the order format 'ORD-{counter}', then you can replace 'ORD' text with below shipment field's text but you can not replace variables.</comment>
+                </field>
+                <field id="shipment_part" translate="label" type="text" sortOrder="3" showInDefault="4" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Shipment Part</label>
+                    <depends>
+                        <field id="enable_customordernumber_shipment">1</field>
+                        <field id="shipment_same_as_order_number">1</field>
+                    </depends>
+                </field>
+                <field id="shipment_number_format" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Shipment Number Format</label>
+                    <depends>
+                        <field id="enable_customordernumber_shipment">1</field>
+                        <field id="shipment_same_as_order_number">0</field>
+                    </depends>
+                    <comment>The following variables can be used to create format: {d}, {dd}, {m}, {mm}, {yy}, {yyyy}, {store_id}, {counter}</comment>
+                </field>
+                <field id="shipment_counter_start_from" translate="label" type="text" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Counter Start From</label>
+                    <depends>
+                        <field id="enable_customordernumber_shipment">1</field>
+                        <field id="shipment_same_as_order_number">0</field>
+                    </depends>
+                    <comment>This configures from which number the {counter} variable begins counting.</comment>
+                </field>
+                <field id="shipment_counter_increment_by" translate="label" type="text" sortOrder="7" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Counter Increment By</label>
+                    <depends>
+                        <field id="enable_customordernumber_shipment">1</field>
+                        <field id="shipment_same_as_order_number">0</field>
+                    </depends>
+                    <comment>If set to 5, the {counter} variable increases by 1 for every new shipment created. If the last number is 1020, the next number will be 1025.</comment>
+                </field>
+                <field id="shipment_counter_number_padding" translate="label" type="text" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Counter Number Padding</label>
+                    <depends>
+                        <field id="enable_customordernumber_shipment">1</field>
+                        <field id="shipment_same_as_order_number">0</field>
+                    </depends>
+                    <comment>Total number of digits in the {counter} variable. If the counter is at 12 and padding is 4, the result will be 0012. Set to 0(zero) not to add leading zeros.</comment>
+                </field>
+            </group>
+            <group id="creditmemo" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Credit Memo Configuration</label>
+                <field id="enable_customordernumber_creditmemo" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Enable Custom Order Number for Credit Memo</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="creditmemo_same_as_order_number" translate="label" type="select" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Same as Order Number</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends>
+                        <field id="enable_customordernumber_creditmemo">1</field>
+                    </depends>
+                    <comment>If set to yes, the credit memo number will have same increment number as order. If order number is 'ORD-0001' then the credit memo number will be 'CRE-0001'.</comment>
+                </field>
+                <field id="creditmemo_order_part" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Replace Order Part with Credit Memo Part</label>
+                    <depends>
+                        <field id="enable_customordernumber_creditmemo">1</field>
+                        <field id="creditmemo_same_as_order_number">1</field>
+                    </depends>
+                    <comment>If you have the order format 'ORD-{counter}', then you can replace 'ORD' text with below credit memo field's text but you can not replace variables.</comment>
+                </field>
+                <field id="creditmemo_part" translate="label" type="text" sortOrder="3" showInDefault="4" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Credit Memo Part</label>
+                    <depends>
+                        <field id="enable_customordernumber_creditmemo">1</field>
+                        <field id="creditmemo_same_as_order_number">1</field>
+                    </depends>
+                </field>
+                <field id="creditmemo_number_format" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Credit Memo Number Format</label>
+                    <depends>
+                        <field id="enable_customordernumber_creditmemo">1</field>
+                        <field id="creditmemo_same_as_order_number">0</field>
+                    </depends>
+                    <comment>The following variables can be used to create format: {d}, {dd}, {m}, {mm}, {yy}, {yyyy}, {store_id}, {counter}</comment>
+                </field>
+                <field id="creditmemo_counter_start_from" translate="label" type="text" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Counter Start From</label>
+                    <depends>
+                        <field id="enable_customordernumber_creditmemo">1</field>
+                        <field id="creditmemo_same_as_order_number">0</field>
+                    </depends>
+                    <comment>This configures from which number the {counter} variable begins counting.</comment>
+                </field>
+                <field id="creditmemo_counter_increment_by" translate="label" type="text" sortOrder="7" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Counter Increment By</label>
+                    <depends>
+                        <field id="enable_customordernumber_creditmemo">1</field>
+                        <field id="creditmemo_same_as_order_number">0</field>
+                    </depends>
+                    <comment>If set to 5, the {counter} variable increases by 1 for every new credit memo created. If the last number is 1020, the next number will be 1025.</comment>
+                </field>
+                <field id="creditmemo_counter_number_padding" translate="label" type="text" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Counter Number Padding</label>
+                    <depends>
+                        <field id="enable_customordernumber_creditmemo">1</field>
+                        <field id="creditmemo_same_as_order_number">0</field>
+                    </depends>
+                    <comment>Total number of digits in the {counter} variable. If the counter is at 12 and padding is 4, the result will be 0012. Set to 0(zero) not to add leading zeros.</comment>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>
